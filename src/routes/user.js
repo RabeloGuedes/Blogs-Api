@@ -5,6 +5,8 @@ const {
   isEmailValid,
   isPasswordValid,
   isTheEmailAlreadyRegistred,
+  isThereAToken,
+  isTheTokenValid,
 } = require('../middlewares/validations');
 
 const userController = require('../controllers/user');
@@ -17,5 +19,10 @@ isEmailValid,
 isPasswordValid,
 isTheEmailAlreadyRegistred,
 userController.createNewUser);
+
+userRoute.get('/',
+isThereAToken,
+isTheTokenValid,
+userController.getAllUsers);
 
 module.exports = userRoute;

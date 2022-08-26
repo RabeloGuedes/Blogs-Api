@@ -1,5 +1,8 @@
+const jwt = require('jsonwebtoken');
 const { User } = require('../database/models');
 const { rescue } = require('../../util');
+
+const SECRET = 'secretJWT';
 
 const loginValidation = rescue(async (req, res, next) => {
   const { email, password } = req.body;
@@ -53,7 +56,22 @@ const isTheEmailAlreadyRegistred = rescue(async (req, res, next) => {
       message: 'User already registered',
     });
   } next();
-}); 
+});
+
+const isThereAToken = rescue(async (req, res, next) => {
+  const { authorization } = req.headers;
+  if (!authorization) {
+    return res.status(401).json({
+      message: 'Token not found',
+    });
+  } next();
+});
+
+const isTheTokenValid = rescue(async (req, _res, next) => {
+  const { authorization } = req.headers;
+  jwt.verify(authorization, SECRET);
+  next();
+});
 
 module.exports = {
   loginValidation,
@@ -62,4 +80,6 @@ module.exports = {
   isEmailValid,
   isPasswordValid,
   isTheEmailAlreadyRegistred,
+  isThereAToken,
+  isTheTokenValid,
 };
