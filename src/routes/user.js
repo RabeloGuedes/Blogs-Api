@@ -1,11 +1,17 @@
 const express = require('express');
 
-const { isDisplayNameValid } = require('../middlewares/validations');
+const {
+  isDisplayNameValid,
+  isEmailValid,
+} = require('../middlewares/validations');
 
 const userController = require('../controllers/user');
 
 const userRoute = express.Router();
 
-userRoute.post('/', isDisplayNameValid, userController.createNewUser);
+userRoute.post('/',
+isDisplayNameValid,
+isEmailValid,
+userController.createNewUser);
 
 module.exports = userRoute;
