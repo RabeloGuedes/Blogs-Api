@@ -5,9 +5,12 @@ const {
   isEmailValid,
   isPasswordValid,
   isTheEmailAlreadyRegistred,
+  isThereAUser,
+} = require('../middlewares/user');
+const {
   isThereAToken,
   isTheTokenValid,
-} = require('../middlewares/validations');
+} = require('../middlewares/token');
 
 const userController = require('../controllers/user');
 
@@ -24,5 +27,11 @@ userRoute.get('/',
 isThereAToken,
 isTheTokenValid,
 userController.getAllUsers);
+
+userRoute.get('/:id',
+isThereAToken,
+isTheTokenValid,
+isThereAUser,
+userController.getUserById);
 
 module.exports = userRoute;
