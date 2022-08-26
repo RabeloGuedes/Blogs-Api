@@ -7,6 +7,12 @@ const createNewCategory = rescue(async (req, res) => {
   res.status(stautsCode.created).json(newCategory);
 });
 
+const getAllCategories = rescue(async (_req, res) => {
+  const allCategories = await categoryService.getAllCategories();
+  res.status(stautsCode.ok).json(allCategories);
+});
+
 module.exports = {
   createNewCategory,
+  getAllCategories,
 };
