@@ -1,23 +1,5 @@
-const jwt = require('jsonwebtoken');
 const { User } = require('../database/models');
 const { rescue, stautsCode } = require('../../util');
-const { tokenInfos } = require('../../util');
-
-const loginValidation = rescue(async (req, res, next) => {
-  const { email, password } = req.body;
-  if (!email || !password) {
-    return res.status(stautsCode.badRequest).json({
-      message: 'Some required fields are missing',
-    });
-  } next();
-});
-
-const isLoginValid = rescue(async (req, res, next) => {
-  const { email, password } = req.body;
-  const isThereAUser = await User.findOne({ where: { email, password } });
-  if (!isThereAUser) return res.status(stautsCode.badRequest).json({ message: 'Invalid fields' });
-  next();
-});
 
 const isDisplayNameValid = rescue(async (req, res, next) => {
   const { displayName } = req.body;
@@ -57,28 +39,20 @@ const isTheEmailAlreadyRegistred = rescue(async (req, res, next) => {
   } next();
 });
 
-const isThereAToken = rescue(async (req, res, next) => {
-  const { authorization } = req.headers;
-  if (!authorization) {
-    return res.status(stautsCode.unauthorized).json({
-      message: 'Token not found',
+const isThereAUser = rescue(async (req, res, next) => {
+  const { params: { id } } = req;
+  const user = await User.findOne({ where: { id } });
+  if (!user) {
+    return res.status(stautsCode.notFound).json({
+      message: 'User does not exist',
     });
   } next();
 });
 
-const isTheTokenValid = rescue(async (req, _res, next) => {
-  const { authorization } = req.headers;
-  jwt.verify(authorization, tokenInfos.secret);
-  next(); 
-});
-
 module.exports = {
-  loginValidation,
-  isLoginValid,
   isDisplayNameValid,
   isEmailValid,
   isPasswordValid,
   isTheEmailAlreadyRegistred,
-  isThereAToken,
-  isTheTokenValid,
+  isThereAUser,
 };
