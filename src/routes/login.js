@@ -3,12 +3,15 @@ const express = require('express');
 const {
   loginValidation,
   isLoginValid,
-} = require('../middlewares/validations');
+} = require('../middlewares/login');
 
 const loginController = require('../controllers/login');
 
 const loginRoute = express.Router();
 
-loginRoute.post('/', loginValidation, isLoginValid, loginController.loginRequest);
+loginRoute.post('/',
+loginValidation,
+isLoginValid,
+loginController.loginRequest);
 
 module.exports = loginRoute;
