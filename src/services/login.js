@@ -6,11 +6,11 @@ const loginRequest = async (req) => {
   const { email, password } = body;
   const { id } = await User.findOne({ where: { email, password } });
   const SECRET = 'secretJWT';
-  const tokenConfig = {
+  const TOKEN_CONFIG = {
     algorithm: 'HS256',
     expiresIn: '1d',
   };
-  const token = jwt.sign({ id }, SECRET, tokenConfig);
+  const token = jwt.sign({ id }, SECRET, TOKEN_CONFIG);
   req.userId = token;
   return token;
 };
