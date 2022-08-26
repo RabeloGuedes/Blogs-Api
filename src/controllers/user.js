@@ -11,7 +11,14 @@ const getAllUsers = async (_req, res) => {
   res.status(stautsCode.ok).json(allUsersInfos);
 };
 
+const getUserById = async (req, res) => {
+  const { params } = req;
+  const user = await userService.getUserById(params);
+  res.status(stautsCode.ok).json(user);
+};
+
 module.exports = {
   createNewUser,
   getAllUsers,
+  getUserById,
 };
