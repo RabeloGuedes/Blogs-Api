@@ -1,8 +1,10 @@
 const loginService = require('../services/login');
 
+const { stautsCode } = require('../../util');
+
 const loginRequest = async (req, res) => {
   const token = await loginService.loginRequest(req);
-  res.status(200).json({ token });
+  res.status(stautsCode.ok).json({ token });
 };
 
 module.exports = {

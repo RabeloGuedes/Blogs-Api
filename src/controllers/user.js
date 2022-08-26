@@ -1,13 +1,14 @@
 const userService = require('../services/user');
+const { stautsCode } = require('../../util');
 
 const createNewUser = async (req, res) => {
   const token = await userService.createNewUser(req);
-  res.status(201).json({ token });
+  res.status(stautsCode.created).json({ token });
 };
 
 const getAllUsers = async (_req, res) => {
   const allUsersInfos = await userService.getAllUsers();
-  res.status(200).json(allUsersInfos);
+  res.status(stautsCode.ok).json(allUsersInfos);
 };
 
 module.exports = {
