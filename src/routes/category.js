@@ -14,4 +14,9 @@ isTheTokenValid,
 isThereACategory,
 categoryController.createNewCategory);
 
+categoryRoute.get('/',
+isThereAToken,
+isTheTokenValid,
+categoryController.getAllCategories);
+
 module.exports = categoryRoute;
