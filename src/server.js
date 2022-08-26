@@ -2,6 +2,7 @@ require('dotenv').config();
 const app = require('./api');
 const loginRoute = require('./routes/login');
 const userRoute = require('./routes/user');
+const error = require('./middlewares/error');
 
 // não remova a variável `API_PORT` ou o `listen`
 const port = process.env.API_PORT || 3000;
@@ -16,12 +17,4 @@ app.listen(port, () => console.log('ouvindo porta', port));
 app.use('/login', loginRoute);
 app.use('/user', userRoute);
 
-app.use((err, _req, res, next) => {
-  console.log(err);
-  const { message } = err;
-  if (message === 'invalid signature' || message === 'jwt malformed') {
-    return res.status(401).json({ message: 'Expired or invalid token' });
-  }
-  res.status(500).json({ message: 'Erro no servidor!' });
-  next(err);
-});
+app.use(error.errorHandler);
