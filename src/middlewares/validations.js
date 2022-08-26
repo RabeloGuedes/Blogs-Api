@@ -45,10 +45,21 @@ const isPasswordValid = rescue(async (req, res, next) => {
   } next();
 });
 
+const isTheEmailAlreadyRegistred = rescue(async (req, res, next) => {
+  const { email } = req.body;
+  const user = await User.findOne({ where: { email } });
+  if (user) {
+    return res.status(409).json({
+      message: 'User already registered',
+    });
+  } next();
+}); 
+
 module.exports = {
   loginValidation,
   isLoginValid,
   isDisplayNameValid,
   isEmailValid,
   isPasswordValid,
+  isTheEmailAlreadyRegistred,
 };
