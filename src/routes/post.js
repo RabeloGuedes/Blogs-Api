@@ -41,4 +41,11 @@ isTheUserAuthorized,
 isThePostUpdateValid,
 postController.updatePostById);
 
+postRoute.delete('/:id',
+isThereAToken,
+isTheTokenValid,
+isThereAPost,
+isTheUserAuthorized,
+postController.deletePostById);
+
 module.exports = postRoute;

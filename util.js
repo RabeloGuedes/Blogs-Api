@@ -9,6 +9,7 @@ const rescue = (action) => async (req, res, next) => {
 const stautsCode = {
   ok: 200,
   created: 201,
+  noContent: 204,
   badRequest: 400,
   unauthorized: 401,
   notFound: 404,
