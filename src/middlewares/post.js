@@ -1,5 +1,5 @@
 const { rescue, stautsCode } = require('../../util');
-const { Category } = require('../database/models');
+const { Category, BlogPost } = require('../database/models');
 
 const isThePostValid = rescue(async (req, res, next) => {
   const { title, content, categoryIds } = req.body;
@@ -20,7 +20,18 @@ const areTheCategoriesValid = rescue(async (req, res, next) => {
   } next();
 });
 
+const isThereAPost = rescue(async (req, res, next) => {
+  const { id } = req.params;
+  const post = await BlogPost.findOne({ where: { id } });
+  if (!post) {
+    return res.status(stautsCode.notFound).json({
+      message: 'Post does not exist',
+    });
+  } next();
+});
+
 module.exports = {
   isThePostValid,
   areTheCategoriesValid,
+  isThereAPost,
 };
