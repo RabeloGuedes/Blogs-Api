@@ -20,4 +20,9 @@ isThereAToken,
 isTheTokenValid,
 postController.createNewPost);
 
+postRoute.get('/',
+isThereAToken,
+isTheTokenValid,
+postController.getAllPost);
+
 module.exports = postRoute;

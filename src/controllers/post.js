@@ -9,6 +9,12 @@ const createNewPost = rescue(async (req, res) => {
   res.status(stautsCode.created).json(newPost);
 });
 
+const getAllPost = rescue(async (_req, res) => {
+  const allPost = await postService.getAllPost();
+  res.status(stautsCode.ok).json(allPost);
+});
+
 module.exports = {
   createNewPost,
+  getAllPost,
 };
