@@ -34,4 +34,8 @@ isTheTokenValid,
 isThereAUser,
 userController.getUserById);
 
+userRoute.delete('/me',
+isThereAToken,
+userController.deleteUser);
+
 module.exports = userRoute;

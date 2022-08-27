@@ -1,5 +1,5 @@
 const jwt = require('jsonwebtoken');
-const { User } = require('../database/models');
+const { User, BlogPost, PostCategory } = require('../database/models');
 const { tokenInfos } = require('../../util');
 
 const createNewUser = async (req) => {
@@ -20,8 +20,18 @@ const getUserById = async ({ id }) => {
   return user;
 };
 
+const deleteUserById = async ({ authorization }) => {
+  const { id } = jwt.verify(authorization, tokenInfos.secret);
+  const blogPosts = await BlogPost.findAll({ where: { userId: id } });
+  const blogPostsIds = blogPosts.map((post) => post.id);
+  await PostCategory.destroy({ where: { postId: blogPostsIds } });
+  await BlogPost.destroy({ where: { userId: id } });
+  await User.destroy({ where: { id } });
+};
+
 module.exports = {
   createNewUser,
   getAllUsers,
   getUserById,
+  deleteUserById,
 };
