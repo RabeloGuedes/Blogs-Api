@@ -6,7 +6,7 @@ const errorHandler = (err, _req, res, next) => {
   if (message === 'invalid signature' || message === 'jwt malformed') {
     return res.status(stautsCode.unauthorized).json({ message: 'Expired or invalid token' });
   }
-  res.status(stautsCode.internalServerError).json({ err });
+  res.status(stautsCode.internalServerError).json({ message: 'Erro no servidor!' });
   next(err);
 };
 

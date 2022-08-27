@@ -6,11 +6,18 @@ const {
   isThereAToken,
 } = require('../middlewares/token');
 
+const {
+  isThePostValid,
+  areTheCategoriesValid,
+} = require('../middlewares/post');
+
 const postRoute = express.Router();
 
 postRoute.post('/',
-isTheTokenValid,
+isThePostValid,
+areTheCategoriesValid,
 isThereAToken,
+isTheTokenValid,
 postController.createNewPost);
 
 module.exports = postRoute;
