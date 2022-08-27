@@ -1,5 +1,6 @@
-const { rescue, stautsCode } = require('../../util');
-const { Category, BlogPost } = require('../database/models');
+const jwt = require('jsonwebtoken');
+const { rescue, stautsCode, tokenInfos } = require('../../util');
+const { Category, BlogPost, User } = require('../database/models');
 
 const isThePostValid = rescue(async (req, res, next) => {
   const { title, content, categoryIds } = req.body;
@@ -30,8 +31,33 @@ const isThereAPost = rescue(async (req, res, next) => {
   } next();
 });
 
+const isThePostUpdateValid = rescue(async (req, res, next) => {
+  const { title, content } = req.body;
+  if (!title || !content) {
+    return res.status(stautsCode.badRequest).json({
+      message: 'Some required fields are missing',
+    });
+  } next();
+});
+
+const isTheUserAuthorized = rescue(async (req, res, next) => {
+  const { authorization } = req.headers;
+  const { id } = req.params;
+  const { id: userId } = jwt.verify(authorization, tokenInfos.secret);
+  const post = await BlogPost
+    .findByPk(id, { include: { model: User, as: 'user', attributes: { exclude: ['password'] } } });
+  const { user } = post;
+  if (user.id !== userId) {
+    return res.status(stautsCode.unauthorized).json({
+      message: 'Unauthorized user',
+    });
+  } next();
+});
+
 module.exports = {
   isThePostValid,
   areTheCategoriesValid,
   isThereAPost,
+  isThePostUpdateValid,
+  isTheUserAuthorized,
 };
