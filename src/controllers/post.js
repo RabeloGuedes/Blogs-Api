@@ -20,8 +20,17 @@ const getPostById = rescue(async (req, res) => {
   res.status(stautsCode.ok).json(post);
 });
 
+const updatePostById = rescue(async (req, res) => {
+  const { id } = req.params;
+  const { body } = req;
+  body.id = id;
+  const updatedPost = await postService.updatePostById(body);
+  res.status(stautsCode.ok).json(updatedPost);
+});
+
 module.exports = {
   createNewPost,
   getAllPost,
   getPostById,
+  updatePostById,
 };

@@ -10,6 +10,8 @@ const {
   isThePostValid,
   areTheCategoriesValid,
   isThereAPost,
+  isThePostUpdateValid,
+  isTheUserAuthorized,
 } = require('../middlewares/post');
 
 const postRoute = express.Router();
@@ -31,5 +33,12 @@ isThereAToken,
 isTheTokenValid,
 isThereAPost,
 postController.getPostById);
+
+postRoute.put('/:id',
+isThereAToken,
+isTheTokenValid,
+isTheUserAuthorized,
+isThePostUpdateValid,
+postController.updatePostById);
 
 module.exports = postRoute;
