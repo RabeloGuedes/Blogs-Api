@@ -34,10 +34,17 @@ const deletePostById = rescue(async (req, res) => {
   res.status(stautsCode.noContent).json();
 });
 
+const getPostByTerm = rescue(async (req, res) => {
+  const { query } = req;
+  const posts = await postService.getPostByTerm(query);
+  res.status(stautsCode.ok).json(posts);
+});
+
 module.exports = {
   createNewPost,
   getAllPost,
   getPostById,
   updatePostById,
   deletePostById,
+  getPostByTerm,
 };

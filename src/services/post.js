@@ -1,9 +1,20 @@
 const jwt = require('jsonwebtoken');
+const { Op } = require('sequelize');
 const { BlogPost, PostCategory, User, Category } = require('../database/models');
 const { tokenInfos } = require('../../util');
 
 const TABLE_JOIN = { include: [{ model: User, as: 'user', attributes: { exclude: ['password'] } },
 { model: Category, as: 'categories', through: { attributes: [] } }] };
+
+const GET_BY_SEARCH_TERM_OPTIONS = (q) => ({
+  where: {
+    [Op.or]: [
+      { title: { [Op.like]: `%${q}%` } },
+      { content: { [Op.like]: `%${q}%` } },
+    ],
+  },
+  ...TABLE_JOIN,
+});
 
 const createNewPost = async ({ title, content, authorization, categoryIds }) => {
   const { id: userId } = jwt.verify(authorization, tokenInfos.secret);
@@ -39,10 +50,19 @@ const deletePostById = async ({ id }) => {
   await BlogPost.destroy({ where: { id } });
 };
 
+const getPostByTerm = async ({ q }) => {
+  if (!q) {
+    const allPost = await getAllPost();
+    return allPost;
+  } const posts = await BlogPost.findAll(GET_BY_SEARCH_TERM_OPTIONS(q));
+  return posts;
+};
+
 module.exports = {
   createNewPost,
   getAllPost,
   getPostById,
   updatePostById,
   deletePostById,
+  getPostByTerm,
 };

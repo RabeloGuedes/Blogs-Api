@@ -28,6 +28,11 @@ isThereAToken,
 isTheTokenValid,
 postController.getAllPost);
 
+postRoute.get('/search',
+isThereAToken,
+isTheTokenValid,
+postController.getPostByTerm);
+
 postRoute.get('/:id',
 isThereAToken,
 isTheTokenValid,
